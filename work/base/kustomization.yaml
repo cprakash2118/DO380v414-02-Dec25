@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- my-secret-devops.yaml
+- my-secret-myapp.yaml
+- my-secret-sre.yaml
+- oauth.yaml
+
