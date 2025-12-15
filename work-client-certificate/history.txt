@@ -1,0 +1,111 @@
+    1  ssh lab@@utility
+    2  ssh lab@utility
+    3  oc whoami 
+    4  mkdir work 
+    5  cd work/
+    6  pwd
+    7  ll
+    8  man openssl req 
+    9  #openssl req -newkey
+   10  man openssl req 
+   11  #openssl req -newkey rsa:4096 
+   12  man openssl req 
+   13  #openssl req -newkey rsa:4096 -keyout do380v414.key 
+   14  man openssl req 
+   15  #openssl req -newkey rsa:4096 -keyout do380v414.key -noenc 
+   16  man openssl req 
+   17  #"/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John Doe"
+   18  #"/O=corp/CN=corp-auditor"
+   19  #openssl req -newkey rsa:4096 -keyout do380v414.key -noenc -subj "/O=corp/CN=corp-auditor" 
+   20  man openssl req 
+   21  #openssl req -newkey rsa:4096 -keyout do380v414.key -noenc -subj "/O=corp/CN=corp-auditor" -out corp-auditor-auth.csr 
+   22  openssl req -newkey rsa:4096 -keyout do380v414.key -noenc -subj "/O=corp/CN=corp-auditor" -out corp-auditor-auth.csr 
+   23  ls
+   24  ll
+   25  vim do380v414.key 
+   26  vim corp-auditor-auth.csr 
+   27  ll
+   28  base64 -w0 corp-auditor-auth.csr ; echo  
+   29  oc explain csr |less
+   30  vim corp-auditor-sign-request.yaml 
+   31  oc explain csr.spec |less
+   32  vim corp-auditor-sign-request.yaml 
+   33  oc explain csr.spec |less
+   34  vim corp-auditor-sign-request.yaml 
+   35  oc explain csr.spec |less
+   36  vim corp-auditor-sign-request.yaml 
+   37  bc
+   38  vim corp-auditor-sign-request.yaml 
+   39  oc explain csr.spec |less
+   40  vim corp-auditor-sign-request.yaml 
+   41  (base64 -w0 corp-auditor-auth.csr ; echo) >> corp-auditor-sign-request.yaml 
+   42  vim corp-auditor-sign-request.yaml 
+   43  oc explain csr.spec |less
+   44  vim corp-auditor-sign-request.yaml 
+   45  oc explain csr.spec |less
+   46  vim corp-auditor-sign-request.yaml 
+   47  oc get csr
+   48  oc create -f corp-auditor-sign-request.yaml 
+   49  oc get csr
+   50  oc adm certificate approve corp-auditor-sign-request
+   51  oc get csr
+   52  ll
+   53  oc get csr corp-auditor-sign-request
+   54  oc get csr corp-auditor-sign-request -o yaml 
+   55  oc get csr corp-auditor-sign-request -o jsonpath='{.status.certificate}'
+   56  oc get csr corp-auditor-sign-request -o jsonpath='{.status.certificate}' ; echo 
+   57  (oc get csr corp-auditor-sign-request -o jsonpath='{.status.certificate}' ; echo) | base64 -d > corp-auditor-cert-sign-req-access.crt
+   58  ll
+   59  vim corp-auditor-cert-sign-req-access.crt 
+   60  ll
+   61  oc config --kubeconfig kubeconfig-corp-auditor.config set-credentials corp-auditor --client-certificate corp-auditor-cert-sign-req-access.crt --client-key do380v414.key --embed-certs 
+   62  ll
+   63  vim kubeconfig-corp-auditor.config 
+   64  ll
+   65  oc config view
+   66  ll
+   67  man openssl s_client 
+   68  #openssl s_client -showcerts
+   69  man openssl s_client 
+   70  #openssl s_client -showcerts -connect api.ocp4.example.com:6443 
+   71  openssl s_client -showcerts -connect api.ocp4.example.com:6443 
+   72  openssl s_client -showcerts -connect api.ocp4.example.com:6443 < /dev/null
+   73  openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null
+   74  date 2> /dev/null 
+   75  datee 2> /dev/null 
+   76  dateee 
+   77  datee 2> /dev/null 
+   78  datee 2>/dev/null 
+   79  openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null 2>/dev/null 
+   80  man openssl x509 
+   81  oc config view 
+   82  #api.ocp4.example.com:6443
+   83  openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null 2>/dev/null 
+   84  #openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null 2>/dev/null | openssl x509
+   85  man openssl x509 
+   86  #openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null 2>/dev/null | openssl x509 -outform PEM > ocp-apiserver-cert.crt 
+   87  ll
+   88  openssl s_client -showcerts -connect api.ocp4.example.com:6443 </dev/null 2>/dev/null | openssl x509 -outform PEM > ocp-apiserver-cert.crt 
+   89  vim ocp-apiserver-cert.crt 
+   90  ls
+   91  #oc config --kubeconfig kubeconfig-corp-auditor.config set-cluster api-ocp4-example-com:6443 --certificate-authority ocp-apiserver-cert.crt --embed-certs=true --server https://api.ocp4.example.com:6443 
+   92  vim kubeconfig-corp-auditor.config
+   93  oc config --help | grep embed 
+   94  oc config set-cluster --help | grep embed 
+   95  vim kubeconfig-corp-auditor.config
+   96  oc config --kubeconfig kubeconfig-corp-auditor.config set-cluster api-ocp4-example-com:6443 --certificate-authority ocp-apiserver-cert.crt --embed-certs=true --server https://api.ocp4.example.com:6443 
+   97  vim kubeconfig-corp-auditor.config
+   98  ls
+   99  oc config --kubeconfig kubeconfig-corp-auditor.config set-context corp-auditor --cluster api-ocp4-example-com:6443 --namespace default --user corp-auditor
+  100  vim kubeconfig-corp-auditor.config
+  101  oc config use-context corp-auditor --kubeconfig kubeconfig-corp-auditor.config 
+  102  vim kubeconfig-corp-auditor.config
+  103  oc whoami 
+  104  oc whoami --kubeconfig kubeconfig-corp-auditor.config
+  105  export KUBECONFIG=./kubeconfig-corp-auditor.config 
+  106  oc whoami 
+  107  unset KUBECONFIG 
+  108  ll
+  109  oc get nodes --kubeconfig kubeconfig-corp-auditor.config 
+  110  ll
+  111  history > history.txt 
